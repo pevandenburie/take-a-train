@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  h1= "Choose a Train"
+  p List of trains:
+  ul
+    each t in trains
+      li
+        a(href="/trains/#{t.Name}") #{t.Name}

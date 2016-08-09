@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1 #{name} train:
+  p Teams:
+  ul
+    each team in train
+      li= team.Name
+
+  br
+  p Details
+  each team, index in teams
+    p #{index}
+    ul
+      each user in team
+        li
+          a(href='http://wwwin-tools.cisco.com/dir/details/#{user.username}') #{user.DisplayName}  (#{user.Role})
+          img(src='http://wwwin.cisco.com/dir/photo/std/#{user.username}.jpg')
