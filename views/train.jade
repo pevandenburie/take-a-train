@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  h1 #{name} train:
+  h1 #{name}:
   p Teams:
   ul
     each team in train
@@ -16,3 +16,7 @@ block content
         li
           a(href='http://wwwin-tools.cisco.com/dir/details/#{user.username}') #{user.DisplayName}  (#{user.Role})
           img(src='http://wwwin.cisco.com/dir/photo/std/#{user.username}.jpg')
+  br
+  p
+    | Report any issue to:
+    a(href="mailto:paulvand@cisco.com") paulvand&#64;cisco.com
