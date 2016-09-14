@@ -5,12 +5,15 @@ block content
   p Teams:
   ul
     each team in train
-      li= team.Name
+      li
+        a(href="##{team.Name}") #{team.Name}
 
   br
-  p Details
+
   each team, index in teams
-    p #{index}
+    p
+      a(id="#{index}")
+      | #{index}
     ul
       each user in team
         li
