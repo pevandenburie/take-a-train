@@ -1,8 +1,59 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
 }
+
+ul {
+	padding: 0px;
+}
+
+.my-nav-btn>a {
+	margin: 5px;
+	color: black;
+	background-image: linear-gradient(#eeeeee, #bbbbbb 60%, #999999);
+}
+
+.my-nav-btn>a:hover {
+	color: white;
+	background-image: linear-gradient(#83e4f7, #31b4e8 60%, #1c7de6);
+}
+
+.my-nav-btn.my-nav-btn-back>a {
+	margin-left: 20px;
+}
+
+a.user {
+	display: block;
+	padding: 10px;
+	min-height: 120px;
+	color: black;
+	background-image: linear-gradient(#eeeeee, #bbbbbb 60%, #999999);
+}
+
+.user:hover {
+	color: white;
+	background-image: linear-gradient(#83e4f7, #31b4e8 60%, #1c7de6);
+}
+
+.user-detail {
+	vertical-align: middle;
+	display: inline-block;
+	width: calc(100% - 66px);
+}
+
+.user-img {
+	width: 66px;
+}
+
+.name {
+	font-size: 20px;
+}
+
+.role {
+	font-size: 14px;
+	font-style: italic;
+}
+
