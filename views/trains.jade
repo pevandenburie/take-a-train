@@ -3,10 +3,11 @@ extends layout
 block content
   h1= "Choose a Train"
   p List of trains:
-  ul
-    each t in trains
-      li
-        a(href="/trains/#{t.Name}") #{t.Name}
+  nav
+    ul(class="nav nav-pills")
+      each t in trains
+        li(class="my-nav-btn")
+          a(href="/trains/#{t.Name}") #{t.Name}
   br
   p
     | Report any issue to:

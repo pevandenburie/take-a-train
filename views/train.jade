@@ -3,22 +3,26 @@ extends layout
 block content
   h1 #{name}:
   p Teams:
-  ul
+  ul(class="nav nav-pills")
     each team in train
-      li
+      li(class="my-nav-btn")
         a(href="##{team.Name}") #{team.Name}
+    li(class="my-nav-btn my-nav-btn-back")
+      a(href="/") Back to trains
 
   br
 
   each team, index in teams
     p
-      a(id="#{index}")
-      | #{index}
-    ul
+      h2(id="#{index}") #{index}
+    ul(class="row")
       each user in team
-        li
-          a(href='http://wwwin-tools.cisco.com/dir/details/#{user.username}') #{user.DisplayName}  (#{user.Role})
-          img(src='http://wwwin.cisco.com/dir/photo/std/#{user.username}.jpg')
+        li(class="list-unstyled col-xs-12 col-sm-6 col-md-4 col-lg-3")
+          a(class="user col-sm-12 panel panel-default" href='http://wwwin-tools.cisco.com/dir/details/#{user.username}')
+            div(class="user-detail")
+              p(class="name text-center") #{user.DisplayName}
+              p(class="role text-center") #{user.Role}
+            img(class="user-img img-responsive img-thumbnail" src='http://wwwin.cisco.com/dir/photo/std/#{user.username}.jpg')
   br
   p
     | Report any issue to:
