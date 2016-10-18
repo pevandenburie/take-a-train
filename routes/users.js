@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+
+router.post('/search', function(req, res, next) {
+  var userObj = req.body;
+  res.send('Searching for '+userObj.name);
 });
+
 
 module.exports = router;
