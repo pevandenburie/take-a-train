@@ -46,6 +46,24 @@ var restApi = rally({
 // global list of trains
 var trains = new Trains();
 
+var searchUser = function(lookingForUser) {
+  var found = "Not Found";
+  trains.forEach(function(train) {
+    train.get("teams").forEach(function(team) {
+      //console.log("Looking "+ lookingForUser+ " into "+ team.get('Name'));
+
+      team.get("users").forEach(function(user) {
+        var current = (user.get("DisplayName") || "");
+        //console.log("User "+current);
+        if (current.indexOf(lookingForUser) != -1) {
+          found = current;
+        }
+      });
+    });
+  });
+  return found;
+}
+
 function getUsernameFromEmail(email) {
   return email.split('@')[0];
 }
@@ -66,7 +84,6 @@ function createTeamMembersCallback(team) {
         username: getUsernameFromEmail(item.EmailAddress),
       });
       team.get('users').add( user );
-
     });
   };
 };
