@@ -47,7 +47,10 @@ var restApi = rally({
 var trains = new Trains();
 
 var searchUser = function(lookingForUser) {
-  var found = "Not Found";
+  var found = {};
+  found.user = "Not Found";
+  found.href = "/";
+
   trains.forEach(function(train) {
     train.get("teams").forEach(function(team) {
       //console.log("Looking "+ lookingForUser+ " into "+ team.get('Name'));
@@ -56,7 +59,9 @@ var searchUser = function(lookingForUser) {
         var current = (user.get("DisplayName") || "");
         //console.log("User "+current);
         if (current.indexOf(lookingForUser) != -1) {
-          found = current;
+          found = {};
+          found.user = current;
+          found.href = '/trains/'+train.get('Name')+'#'+team.get('Name');
         }
       });
     });
@@ -168,3 +173,4 @@ restApi.get({
 
 
 exports.trains = trains;
+exports.searchUser = searchUser;
