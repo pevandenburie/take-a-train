@@ -1,6 +1,14 @@
 extends layout
 
 block content
+  h1= "Looking for someone?"
+
+  form(name="get-user", method="post", action="/users/search")
+    div.input
+      span.label Name:
+      input(type="text", name="name", value="")
+      input(type="submit", value="Search")
+
   h1= "Choose a Train"
   p List of trains:
   nav
