@@ -7,8 +7,6 @@ var trains = require('../models/train').trains;
 
 router.get('/:name', function(req, res) {
 
-  //console.log(trains.findWhere({ Name: req.params.name }).get('teams').toJSON());
-
   // Convert Team collection to an object readable by template
   var teams = {};
   trains.findWhere({ Name: req.params.name }).get('teams').forEach(function(team) {

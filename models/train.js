@@ -47,28 +47,34 @@ var restApi = rally({
 var trains = new Trains();
 
 var searchUser = function(lookingForUser) {
-  var found = {};
-  found.user = "Not Found";
-  found.href = "/";
+  var noneFound =  {
+    "name": "Not Found",
+    "href": "/"
+  };
+  var founds = [];
 
   lookingForUser = lookingForUser.toLowerCase();
 
   trains.forEach(function(train) {
     train.get("teams").forEach(function(team) {
-      //console.log("Looking "+ lookingForUser+ " into "+ team.get('Name'));
 
       team.get("users").forEach(function(user) {
         var current = (user.get("DisplayName") || "");
-        //console.log("User "+current);
         if (current.toLowerCase().indexOf(lookingForUser) != -1) {
-          found = {};
-          found.user = current;
-          found.href = '/trains/'+train.get('Name')+'#'+team.get('Name');
+          var found = {
+            "name": current,
+            "href": ('/trains/'+train.get('Name')+'#'+team.get('Name'))
+          };
+          founds.push(found);
         }
       });
     });
   });
-  return found;
+
+  if (founds.length === 0) {
+    founds.push(noneFound);
+  }
+  return founds;
 }
 
 function getUsernameFromEmail(email) {

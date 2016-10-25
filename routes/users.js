@@ -6,11 +6,13 @@ var searchUser = require('../models/train').searchUser;
 
 router.post('/search', function(req, res, next) {
   var userObj = req.body;
-  // res.send('Searching for '+userObj.name);
+  var founds = searchUser(userObj.name);
 
-  var found = searchUser(userObj.name);
-  //res.send('Searching for '+userObj.name+': '+found.user+' '+found.href);
-  res.render('searchUser', found);
+  /*console.log("founds " + founds.length);
+  founds.forEach( function(u){
+    console.log(u.name + u.href);
+  } );*/
+  res.render('searchUser', { users: founds });
 });
 
 

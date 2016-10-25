@@ -5,8 +5,9 @@ block content
   p Found:
 
   ul(class="nav nav-pills")
-    li(class="my-nav-btn")
-      a(href="#{href}") #{user}
+    each u in users
+      li(class="my-nav-btn")
+        a(href="#{u.href}") #{u.name}
     li(class="my-nav-btn my-nav-btn-back")
       a(href="/") Back to trains
 
