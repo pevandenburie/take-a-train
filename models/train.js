@@ -51,6 +51,8 @@ var searchUser = function(lookingForUser) {
   found.user = "Not Found";
   found.href = "/";
 
+  lookingForUser = lookingForUser.toLowerCase();
+
   trains.forEach(function(train) {
     train.get("teams").forEach(function(team) {
       //console.log("Looking "+ lookingForUser+ " into "+ team.get('Name'));
@@ -58,7 +60,7 @@ var searchUser = function(lookingForUser) {
       team.get("users").forEach(function(user) {
         var current = (user.get("DisplayName") || "");
         //console.log("User "+current);
-        if (current.indexOf(lookingForUser) != -1) {
+        if (current.toLowerCase().indexOf(lookingForUser) != -1) {
           found = {};
           found.user = current;
           found.href = '/trains/'+train.get('Name')+'#'+team.get('Name');
