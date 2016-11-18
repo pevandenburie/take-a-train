@@ -4,6 +4,8 @@ var Teams = require('../models/team').Teams;
 var Train = Backbone.Model.extend({
   defaults: {
     Name: "NA",
+    Description: "",
+    Notes: "",
     teams: undefined,
   },
   initialize: function() {
@@ -103,6 +105,7 @@ function createTeamMembersCallback(team) {
 
 function createTeamCallback(train) {
   return function(result) {
+
     // Process the list of teams
     result.Object.Results.forEach(function(item) {
       console.log(item.Name + ' (' + item._ref + ')');
@@ -124,15 +127,23 @@ function createTeamCallback(train) {
   };
 }
 
-function createTrainCallback(train) {
+function createTrainCallback() {
   return function(result) {
+    console.log('-----Train--------');
     console.log(result.Object.Name + ' (' + result.Object._ref + ')');
+    console.log('Description: ' + result.Object.Description);
+    console.log('Notes: ' + result.Object.Notes);
+    //console.log(result.Object.Name + ' (' + JSON.stringify(result.Object) + ')');
     console.log('------------------');
 
-    //
-    // // Append the train to the list
-    // var train = new Train({ Name: item.Name });
-    // trains.add( train );
+
+    // Append the train to the list
+    var train = new Train({
+      Name: result.Object.Name,
+      Description: result.Object.Description,
+      Notes: result.Object.Notes
+    });
+    trains.add( train );
 
     // Get list of teams
     var teamCallback = createTeamCallback(train);
@@ -151,15 +162,10 @@ function createTrainsCallback(trains) {
     // Process the list of trains
     result.Object.Results.forEach(function(item) {
 
-      // Append the train to the list
-      var train = new Train({ Name: item.Name });
-      trains.add( train );
-
-      // Retrieve the train object
-      var trainCallback = createTrainCallback(train);
+      var trainCallback = createTrainCallback();
       restApi.get({
           ref: item,
-          fetch: ['FormattedID', 'Name', 'Children'], //fields to fetch
+          fetch: ['FormattedID', 'Name', 'Children', 'Description', 'Notes'], //fields to fetch
       }).then(trainCallback)
       .fail(function(errors) {
         console.log(errors);

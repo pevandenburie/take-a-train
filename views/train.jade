@@ -1,7 +1,9 @@
 extends layout
 
 block content
-  h1 #{name}:
+  h1 #{Name}:
+  p #{Description}
+  p #{Notes}
   p Teams:
   ul(class="nav nav-pills")
     each team in train
