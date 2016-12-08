@@ -2,9 +2,11 @@
 var http = require('https');
 
 // The HTTP request we want is https://ews-aln-core.cisco.com/itsm/mailer/rest/search/*ih_navy*;format=csv
+var origin_path = "/itsm/mailer/rest/search/";
+
 var options = {
   host : "ews-aln-core.cisco.com",
-  path : "/itsm/mailer/rest/search/",
+  path : "",
   auth : process.env.MAILER_USER_PASSWORD // Must be username:password format
 };
 
@@ -23,7 +25,9 @@ var searchTrain = function(trainName, cb) {
     });
   };
 
-  options.path += '*ih_'+trainName.toLowerCase()+'*;format=csv';
+  options.path = origin_path + '*ih_'+trainName.toLowerCase()+'*;format=csv';
+  console.log("option.path: "+options.path);
+
   http.request(options, mailer_cb)
     .on('error', function(error) {
       //console.log('Error: ' + error.message);
