@@ -15,20 +15,3 @@ trains.forEach( function(trainName) {
     console.log('------------------------------------------');
   });
 });
-
-// mailer.searchTrain("navy", function(response) {
-//   console.log('found: ');
-//   print_result(response);
-// });
-//
-//
-// mailer.searchTrain("Pink", function(response) {
-//   console.log('found: ');
-//   print_result(response);
-// });
-//
-//
-// mailer.searchTrain("unknown", function(response) {
-//   console.log('found: ');
-//   print_result(response);
-// });
