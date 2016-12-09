@@ -48,7 +48,9 @@ var searchTrain = function(trainName, cb) {
     });
   };
 
-  options.path = origin_path + '*ih_'+trainName.toLowerCase()+'*;format=csv';
+  // In case the train name is "Orange Train", convert to "orange"
+  trainName = trainName.toLowerCase().split(' ')[0];
+  options.path = origin_path + '*ih_'+trainName+'*;format=csv';
   console.log("option.path: "+options.path);
 
   http.request(options, mailer_cb)

@@ -6,7 +6,7 @@ function print_result(result) {
   });
 }
 
-var trains = ["Purple", "Brown", "Saffron", "Green", "Navy", "Grey", "Blue", "Gold", "Orange", "Pink"];
+var trains = ["Purple Train", "Brown Train", "Saffron Train", "Green Train", "Navy Train", "Grey Train", "Blue Train", "Gold Train", "Orange Train", "Pink Train"];
 
 trains.forEach( function(trainName) {
   mailer.searchTrain(trainName, function(response) {

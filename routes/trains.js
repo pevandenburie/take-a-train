@@ -23,6 +23,7 @@ router.get('/:name', function(req, res) {
       Description: train.get('Description'),
       Notes: train.get('Notes'),
       train: train.get('teams').toJSON(),
+      mailers: train.get('mailers'),
       teams: teams,
     });
 });

@@ -14,6 +14,9 @@ block content
 
   br
 
+  each mailer in mailers
+    p !{mailer.description}
+
   each team, index in teams
     p
       h2(id="#{index}") #{index}
