@@ -24,7 +24,7 @@ function processCSV(result_string) {
       result_entry["mailer"] = splitted[1];
       result_entry["description"] = splitted[3];
 
-      console.log(result_entry);
+      //console.log(result_entry);
       result_array.push(result_entry);
     }
   });
