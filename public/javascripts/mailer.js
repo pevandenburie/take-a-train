@@ -10,6 +10,28 @@ var options = {
   auth : process.env.MAILER_USER_PASSWORD // Must be username:password format
 };
 
+function processCSV(result_string) {
+  var result_array = [];
+  // Remove the 'header' of the table (item,mailer,Status,description)
+  //var result_array = result_string.split('\n').splice(0, 1);
+  var arr = result_string.split('\n');
+  arr.splice(0, 1);
+  arr.forEach( function(row) {
+    if (row.length > 1) { // due to the split, we still may have an (empty) row
+      var splitted = row.split(',');
+
+      var result_entry = {};
+      result_entry["mailer"] = splitted[1];
+      result_entry["description"] = splitted[3];
+
+      console.log(result_entry);
+      result_array.push(result_entry);
+    }
+  });
+
+  return result_array;
+}
+
 
 var searchTrain = function(trainName, cb) {
 
@@ -21,7 +43,8 @@ var searchTrain = function(trainName, cb) {
 
     response.on('end', function() {
       //console.log(str);
-      cb(str);
+      var result_array = processCSV(str);
+      cb(result_array);
     });
   };
 
@@ -37,4 +60,3 @@ var searchTrain = function(trainName, cb) {
 }
 
 exports.searchTrain = searchTrain;
-//module.exports.searchTrain = searchTrain;
