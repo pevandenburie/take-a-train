@@ -1,11 +1,13 @@
 var Backbone = require('backbone');
 var Teams = require('../models/team').Teams;
+var mailer = require('../public/javascripts/mailer.js');
 
 var Train = Backbone.Model.extend({
   defaults: {
     Name: "NA",
     Description: "",
     Notes: "",
+    mailers: [],
     teams: undefined,
   },
   initialize: function() {
@@ -144,6 +146,19 @@ function createTrainCallback() {
       Notes: result.Object.Notes
     });
     trains.add( train );
+
+    // Get mailer addresses for the train
+    mailer.searchTrain(result.Object.Name, function(response) {
+
+      // function print_result(result) {
+      //   result.forEach( function(row) {
+      //     console.log(row);
+      //   });
+      // }
+      // print_result(response);
+
+      train.set('mailers', response);
+    });
 
     // Get list of teams
     var teamCallback = createTeamCallback(train);

@@ -21,8 +21,8 @@ function processCSV(result_string) {
       var splitted = row.split(',');
 
       var result_entry = {};
-      result_entry["mailer"] = splitted[1];
-      result_entry["description"] = splitted[3];
+      result_entry["mailer"] = splitted[1].trim();
+      result_entry["description"] = splitted[3].trim();
 
       //console.log(result_entry);
       result_array.push(result_entry);
@@ -48,7 +48,9 @@ var searchTrain = function(trainName, cb) {
     });
   };
 
-  options.path = origin_path + '*ih_'+trainName.toLowerCase()+'*;format=csv';
+  // In case the train name is "Orange Train", convert to "orange"
+  trainName = trainName.toLowerCase().split(' ')[0];
+  options.path = origin_path + '*ih_'+trainName+'*;format=csv';
   console.log("option.path: "+options.path);
 
   http.request(options, mailer_cb)
