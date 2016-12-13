@@ -40,6 +40,8 @@ Data are retrieved from the Rally project.
 ### Start the image (exposing to port 80)
 
 ```console
-  sudo docker run -p 80:3000 -e RALLY_API_KEY='_GeUV8XARSxa9zLefh...' takeatrain
+  sudo docker run --rm -p 80:3000  \
+    -e RALLY_API_KEY="_GeUV8XARSxa9zLefh..."  \
+    -e MAILER_USER_PASSWORD="user:password"  \
+    takeatrain
 ```
-
