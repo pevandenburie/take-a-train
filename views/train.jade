@@ -15,9 +15,10 @@ block content
   br
 
   each mailer in mailers
-    a(href="mailto:#{mailer.mailer}@cisco.com") !{mailer.mailer}
-    !{mailer.description}
-    br
+    p
+      a(href="mailto:#{mailer.mailer}@cisco.com") !{mailer.mailer}
+      |  : !{mailer.description}
+  br
 
   each team, index in teams
     p
