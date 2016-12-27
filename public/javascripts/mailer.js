@@ -13,19 +13,24 @@ var options = {
 function processCSV(result_string) {
   var result_array = [];
   // Remove the 'header' of the table (item,mailer,Status,description)
-  //var result_array = result_string.split('\n').splice(0, 1);
   var arr = result_string.split('\n');
   arr.splice(0, 1);
   arr.forEach( function(row) {
+    //console.log("row length: " + row.length);
     if (row.length > 1) { // due to the split, we still may have an (empty) row
       var splitted = row.split(',');
 
-      var result_entry = {};
-      result_entry["mailer"] = splitted[1].trim();
-      result_entry["description"] = splitted[3].trim();
+      if (splitted.length < 4) {  // In case of error, we receive an HTML error page
+        console.log("Wrong Mailer row: " + splitted);
+      } else
+      {
+        var result_entry = {};
+        result_entry["mailer"] = splitted[1].trim();
+        result_entry["description"] = splitted[3].trim();
 
-      //console.log(result_entry);
-      result_array.push(result_entry);
+        //console.log(result_entry);
+        result_array.push(result_entry);
+      }
     }
   });
 
@@ -33,9 +38,9 @@ function processCSV(result_string) {
 }
 
 
-var searchTrain = function(trainName, cb) {
+function createMailerCb(cb) {
 
-  var mailer_cb = function(response) {
+  return function(response) {
     var str = '';
     response.on('data', function(chunk) {
       str += chunk;
@@ -47,10 +52,16 @@ var searchTrain = function(trainName, cb) {
       cb(result_array);
     });
   };
+}
+
+
+var searchTrain = function(trainName, cb) {
+
+  var mailer_cb = createMailerCb(cb);
 
   // In case the train name is "Orange Train", convert to "orange"
   trainName = trainName.toLowerCase().split(' ')[0];
-  options.path = origin_path + '*ih_'+trainName+'*;format=csv';
+  options.path = origin_path + 'ih_'+trainName+'*;format=csv';
   console.log("option.path: "+options.path);
 
   http.request(options, mailer_cb)
@@ -61,4 +72,66 @@ var searchTrain = function(trainName, cb) {
     .end();
 }
 
+
+function createMailerCbRecursive(teamNameList, cb) {
+
+  return function(response) {
+    var str = '';
+    response.on('data', function(chunk) {
+      str += chunk;
+    });
+
+    response.on('end', function() {
+      //console.log(str);
+      var result_array = processCSV(str);
+      if ((result_array.length === 0) && (teamNameList.length > 0)) {
+          searchTeamRecursive(teamNameList, cb);
+      } else {
+        cb(result_array);
+      }
+    });
+  };
+}
+
+function searchTeamRecursive(teamNameList, cb) {
+
+  var mailer_cb = createMailerCbRecursive(teamNameList, cb);
+
+  options.path = teamNameList.shift();
+  console.log("option.path: "+options.path);
+
+  http.request(options, mailer_cb)
+    .on('error', function(error) {
+      //console.log('Error: ' + error.message);
+      cb(error.message);
+    })
+    .end();
+}
+
+var searchTeam = function(teamName, cb) {
+
+    var teamNameFormatted = "";
+    var teamNameList = [];
+
+    // In case the team name is "Roland Garros", search for "ih_roland_garros*"
+    teamNameFormatted = teamName.toLowerCase().replace(' ', '_');
+    teamNameList.push( origin_path + 'ih_'+teamNameFormatted+'*;format=csv' );
+
+    // In case the team name is "Roland Garros", search for "ih_rolandgarros*"
+    teamNameFormatted = teamName.toLowerCase().replace(' ', '');
+    teamNameList.push( origin_path + 'ih_'+teamNameFormatted+'*;format=csv' );
+
+
+    // Try with "phoenix" instead of "ih"
+    teamNameFormatted = teamName.toLowerCase().replace(' ', '_');
+    teamNameList.push( origin_path + 'phoenix_'+teamNameFormatted+'*;format=csv' );
+
+    // In case the team name is "Roland Garros", search for "*roland_garros*"
+    // teamNameFormatted = teamName.toLowerCase().replace(' ', '_');
+    // teamNameList.push( origin_path + '*'+teamNameFormatted+'*;format=csv' );
+
+    searchTeamRecursive(teamNameList, cb);
+}
+
 exports.searchTrain = searchTrain;
+exports.searchTeam = searchTeam;

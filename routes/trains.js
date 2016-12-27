@@ -12,10 +12,13 @@ router.get('/:name', function(req, res) {
   // Convert Team collection to an object readable by template
   var teams = {};
   train.get('teams').forEach(function(team) {
-    teams[team.get('Name')] = team.get('users').toJSON();
+    var teamName = team.get('Name');
+    teams[teamName] = {};
+    teams[teamName]['users'] = team.get('users').toJSON();
+    teams[teamName]['mailers'] = team.get('mailers');
   });
-  console.log('*********');
-  console.log(teams);
+  //console.log('*********');
+  //console.log(teams);
 
   res.render('train',
     {
