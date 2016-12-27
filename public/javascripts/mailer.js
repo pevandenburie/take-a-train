@@ -17,15 +17,21 @@ function processCSV(result_string) {
   var arr = result_string.split('\n');
   arr.splice(0, 1);
   arr.forEach( function(row) {
+    //console.log("row length: " + row.length);
     if (row.length > 1) { // due to the split, we still may have an (empty) row
       var splitted = row.split(',');
 
-      var result_entry = {};
-      result_entry["mailer"] = splitted[1].trim();
-      result_entry["description"] = splitted[3].trim();
+      if (splitted.length < 4) {  // In case of error, we receive an HTML error page
+        console.log("Wrong Mailer row: " + splitted);
+      } else
+      {
+        var result_entry = {};
+        result_entry["mailer"] = splitted[1].trim();
+        result_entry["description"] = splitted[3].trim();
 
-      //console.log(result_entry);
-      result_array.push(result_entry);
+        //console.log(result_entry);
+        result_array.push(result_entry);
+      }
     }
   });
 
