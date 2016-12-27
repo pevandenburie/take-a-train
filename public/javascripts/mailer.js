@@ -13,7 +13,6 @@ var options = {
 function processCSV(result_string) {
   var result_array = [];
   // Remove the 'header' of the table (item,mailer,Status,description)
-  //var result_array = result_string.split('\n').splice(0, 1);
   var arr = result_string.split('\n');
   arr.splice(0, 1);
   arr.forEach( function(row) {
@@ -41,7 +40,7 @@ function processCSV(result_string) {
 
 function createMailerCb(cb) {
 
-  var mailer_cb = function(response) {
+  return function(response) {
     var str = '';
     response.on('data', function(chunk) {
       str += chunk;
@@ -53,8 +52,6 @@ function createMailerCb(cb) {
       cb(result_array);
     });
   };
-
-  return mailer_cb;
 }
 
 
@@ -76,21 +73,64 @@ var searchTrain = function(trainName, cb) {
 }
 
 
+function createMailerCbRecursive(teamNameList, cb) {
+
+  return function(response) {
+    var str = '';
+    response.on('data', function(chunk) {
+      str += chunk;
+    });
+
+    response.on('end', function() {
+      //console.log(str);
+      var result_array = processCSV(str);
+      if ((result_array.length === 0) && (teamNameList.length > 0)) {
+          searchTeamRecursive(teamNameList, cb);
+      } else {
+        cb(result_array);
+      }
+    });
+  };
+}
+
+function searchTeamRecursive(teamNameList, cb) {
+
+  var mailer_cb = createMailerCbRecursive(teamNameList, cb);
+
+  options.path = teamNameList.shift();
+  console.log("option.path: "+options.path);
+
+  http.request(options, mailer_cb)
+    .on('error', function(error) {
+      //console.log('Error: ' + error.message);
+      cb(error.message);
+    })
+    .end();
+}
+
 var searchTeam = function(teamName, cb) {
 
-    var mailer_cb = createMailerCb(cb);
+    var teamNameFormatted = "";
+    var teamNameList = [];
 
-    // In case the team name is "Roland Garros", convert to "roland"
-    teamName = teamName.toLowerCase().replace(' ', '_');
-    options.path = origin_path + 'ih_*'+teamName+'*;format=csv';
-    console.log("option.path: "+options.path);
+    // In case the team name is "Roland Garros", search for "ih_roland_garros*"
+    teamNameFormatted = teamName.toLowerCase().replace(' ', '_');
+    teamNameList.push( origin_path + 'ih_'+teamNameFormatted+'*;format=csv' );
 
-    http.request(options, mailer_cb)
-      .on('error', function(error) {
-        //console.log('Error: ' + error.message);
-        cb(error.message);
-      })
-      .end();
+    // In case the team name is "Roland Garros", search for "ih_rolandgarros*"
+    teamNameFormatted = teamName.toLowerCase().replace(' ', '');
+    teamNameList.push( origin_path + 'ih_'+teamNameFormatted+'*;format=csv' );
+
+
+    // Try with "phoenix" instead of "ih"
+    teamNameFormatted = teamName.toLowerCase().replace(' ', '_');
+    teamNameList.push( origin_path + 'phoenix_'+teamNameFormatted+'*;format=csv' );
+
+    // In case the team name is "Roland Garros", search for "*roland_garros*"
+    // teamNameFormatted = teamName.toLowerCase().replace(' ', '_');
+    // teamNameList.push( origin_path + '*'+teamNameFormatted+'*;format=csv' );
+
+    searchTeamRecursive(teamNameList, cb);
 }
 
 exports.searchTrain = searchTrain;

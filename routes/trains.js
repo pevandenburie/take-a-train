@@ -17,8 +17,8 @@ router.get('/:name', function(req, res) {
     teams[teamName]['users'] = team.get('users').toJSON();
     teams[teamName]['mailers'] = team.get('mailers');
   });
-  console.log('*********');
-  console.log(teams);
+  //console.log('*********');
+  //console.log(teams);
 
   res.render('train',
     {

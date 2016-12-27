@@ -10,12 +10,12 @@ function print_result(result) {
 var teams = [
   "Mallard",
   "Wembley",
-  "The Calabash",
-  "Olimpico",
+  "The Calabash", // thecalabash_devlopers
+  "Olimpico",   // ih_millennium_olimpico_sms  phoenix_olimpico_scrum_team  vgw_millennium_and_olimpico_scrums
   "Valhalla",
-  "Millennium",
+  "Millennium",   // phoenix_millennium_scrum_team  ih_millennium_olimpico_sms  vgw_millennium_and_olimpico_scrums
   "Centenario",
-  "PC_Mac",
+  "PC_Mac",       // ih_pcmac_scrum_team
   "Falmer",
   "Allianz",
   "Roland Garros",
@@ -50,7 +50,7 @@ var teams = [
   "Winter",
   "Foxboro",
   "Malka",
-  "Indian Runner",
+  "Indian Runner",  // indianrunner
   "Welkin",
   "Atlantis",
   "Turbo",
