@@ -23,8 +23,17 @@ block content
   each team, index in teams
     p
       h2(id="#{index}") #{index}
+
+
+    each mailer in team.mailers
+      p
+        a(href="mailto:#{mailer.mailer}@cisco.com") !{mailer.mailer}
+        |  : !{mailer.description}
+    br
+
+
     ul(class="row")
-      each user in team
+      each user in team.users
         li(class="list-unstyled col-xs-12 col-sm-6 col-md-4 col-lg-3")
           a(class="user col-sm-12 panel panel-default" href='http://wwwin-tools.cisco.com/dir/details/#{user.username}')
             div(class="user-detail")

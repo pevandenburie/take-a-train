@@ -4,6 +4,7 @@ var Users = require('../models/user').Users;
 var Team = Backbone.Model.extend({
   defaults: {
     Name: 'NA',
+    mailers: [],
     users: undefined,
   },
   initialize: function() {
