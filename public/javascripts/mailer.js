@@ -148,19 +148,29 @@ var searchTeam = function(teamName, cb) {
     teamNameFormatted = teamName.toLowerCase().replace(' ', '_');
     teamNameList.push( origin_path + 'scrum-'+teamNameFormatted+'*;format=csv' );
 
+
     //--------------------------------------------------------------------------
-    // Below searches return a "lot of results": keep them for the end
-    // (search for '_' returns results for both '-' and '_')
+    // Hardcoded solutions for teams particularly hard to find in Mailer
+    if (teamName === "Astronomer") {
+      teamNameList.push( origin_path + 'veop_ast;format=csv' );
+    } else if (teamName === "The Peloton") {
+      teamNameList.push( origin_path + 'peloton;format=csv' );
+    } else {
 
-    // In case the team name is "Madras Cafe", search for "madras_cafe*"
-    teamNameFormatted = teamName.toLowerCase().replace(' ', '_');
-    teamNameList.push( origin_path +teamNameFormatted+'*;format=csv' );
+      //--------------------------------------------------------------------------
+      // Below searches return a "lot of results": keep them for the end
+      // (search for '_' returns results for both '-' and '_')
 
-    // In case the team name is "Indian Runner", search for "*indianrunner*"
-    // This should return the last unfound teams
-    teamNameFormatted = teamName.toLowerCase().replace(' ', '');
-    teamNameList.push( origin_path + '*' +teamNameFormatted+'*;format=csv' );
+      // In case the team name is "Madras Cafe", search for "madras_cafe*"
+      teamNameFormatted = teamName.toLowerCase().replace(' ', '_');
+      teamNameList.push( origin_path +teamNameFormatted+'*;format=csv' );
 
+      // In case the team name is "Indian Runner", search for "*indianrunner*"
+      // This should return the last unfound teams
+      teamNameFormatted = teamName.toLowerCase().replace(' ', '');
+      teamNameList.push( origin_path + '*' +teamNameFormatted+'*;format=csv' );
+    }
+    
     searchTeamRecursive(teamNameList, cb);
 }
 
