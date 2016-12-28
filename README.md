@@ -1,5 +1,7 @@
 Take A Train
 ------------
+[![Docker Repository on Quay Enterprise](https://containers.cisco.com/repository/paulvand/spvss-takeatrain/status "Docker Repository on Quay Enterprise")](https://containers.cisco.com/repository/paulvand/spvss-takeatrain)
+[![Website](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](http://spvss-takeatrain.cisco.com/)
 
 A Cisco teams "Train-o-scope" for the Infinite Home project.
 
