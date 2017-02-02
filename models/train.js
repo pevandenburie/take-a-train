@@ -108,9 +108,14 @@ function createTeamMembersCallback(team) {
 function createTeamMailerCallback(team) {
   return function(response) {
     function print_result(result) {
-      result.forEach( function(row) {
-        console.log(row);
-      });
+      if (Array.isArray(result)) {
+        result.forEach( function(row) {
+          console.log(row);
+        });
+      }
+      else {
+        console.log(result);
+      }
     }
     print_result(response);
     team.set('mailers', response);
@@ -131,7 +136,7 @@ function createTeamCallback(train) {
 
       // Get mailer addresses for the team
       mailer.searchTeam(item.Name, createTeamMailerCallback(team));
-      
+
       // Retrieve the Team members
       var teamMembersCallback = createTeamMembersCallback(team);
       restApi.get({
