@@ -51,10 +51,6 @@ var restApi = rally({
 var trains = new Trains();
 
 var searchUser = function(lookingForUser) {
-  var noneFound =  {
-    "name": "Not Found",
-    "href": "/"
-  };
   var founds = [];
 
   lookingForUser = lookingForUser.toLowerCase();
@@ -66,7 +62,7 @@ var searchUser = function(lookingForUser) {
         var current = (user.get("DisplayName") || "");
         if (current.toLowerCase().indexOf(lookingForUser) != -1) {
           var found = {
-            "name": current,
+            "name": current+ ' ('+team.get('Name')+')',
             "href": ('/trains/'+train.get('Name')+'#'+team.get('Name'))
           };
           founds.push(found);
@@ -75,9 +71,28 @@ var searchUser = function(lookingForUser) {
     });
   });
 
-  if (founds.length === 0) {
-    founds.push(noneFound);
-  }
+  return founds;
+}
+
+var searchTeam = function(lookingForTeam) {
+  var founds = [];
+
+  lookingForTeam = lookingForTeam.toLowerCase();
+
+  trains.forEach(function(train) {
+    train.get("teams").forEach(function(team) {
+
+      var current = (team.get('Name') || "");
+      if (current.toLowerCase().indexOf(lookingForTeam) != -1) {
+        var found = {
+          "name": current + ' ('+train.get('Name')+')',
+          "href": ('/trains/'+train.get('Name')+'#'+team.get('Name'))
+        };
+        founds.push(found);
+      }
+    });
+  });
+
   return founds;
 }
 
@@ -224,3 +239,4 @@ restApi.get({
 
 exports.trains = trains;
 exports.searchUser = searchUser;
+exports.searchTeam = searchTeam;
