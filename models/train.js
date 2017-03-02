@@ -106,16 +106,18 @@ function createTeamMembersCallback(team) {
 
     // Display each team member
     result.Object.Results.forEach(function(item) {
-      console.log(item.DisplayName + ' (' + item.EmailAddress + ')');
+      console.log(item.DisplayName + ' (' + item.EmailAddress + ')' + (item.Disabled?' DISABLED':''));
 
-      // Append the user to the list
-      var user = new User({
-        DisplayName: item.DisplayName,
-        EmailAddress: item.EmailAddress,
-        Role: item.Role,
-        username: getUsernameFromEmail(item.EmailAddress),
-      });
-      team.get('users').add( user );
+      if (!item.Disabled) {
+        // Append the user to the list
+        var user = new User({
+          DisplayName: item.DisplayName,
+          EmailAddress: item.EmailAddress,
+          Role: item.Role,
+          username: getUsernameFromEmail(item.EmailAddress),
+        });
+        team.get('users').add( user );
+      }
     });
   };
 };
