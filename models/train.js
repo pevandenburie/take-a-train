@@ -170,42 +170,43 @@ function createTeamCallback(train) {
 function createTrainCallback() {
   return function(result) {
     console.log('-----Train--------');
-    console.log(result.Object.Name + ' (' + result.Object._ref + ')');
+    console.log(result.Object.Name + ' (' + result.Object._ref + ') ' + (result.Object.State==='Open'?'':result.Object.State));
     console.log('Description: ' + result.Object.Description);
     console.log('Notes: ' + result.Object.Notes);
     //console.log(result.Object.Name + ' (' + JSON.stringify(result.Object) + ')');
     console.log('------------------');
 
+    if (result.Object.State==='Open') {
+      // Append the train to the list
+      var train = new Train({
+        Name: result.Object.Name,
+        Description: result.Object.Description,
+        Notes: result.Object.Notes
+      });
+      trains.add( train );
 
-    // Append the train to the list
-    var train = new Train({
-      Name: result.Object.Name,
-      Description: result.Object.Description,
-      Notes: result.Object.Notes
-    });
-    trains.add( train );
+      // Get mailer addresses for the train
+      mailer.searchTrain(result.Object.Name, function(response) {
 
-    // Get mailer addresses for the train
-    mailer.searchTrain(result.Object.Name, function(response) {
+        // function print_result(result) {
+        //   result.forEach( function(row) {
+        //     console.log(row);
+        //   });
+        // }
+        // print_result(response);
 
-      // function print_result(result) {
-      //   result.forEach( function(row) {
-      //     console.log(row);
-      //   });
-      // }
-      // print_result(response);
+        train.set('mailers', response);
+      });
 
-      train.set('mailers', response);
-    });
-
-    // Get list of teams
-    var teamCallback = createTeamCallback(train);
-    restApi.get({
-      ref: result.Object.Children,
-    }).then(teamCallback)
-    .fail(function(errors) {
-       console.log(errors);
-    });
+      // Get list of teams
+      var teamCallback = createTeamCallback(train);
+      restApi.get({
+        ref: result.Object.Children,
+      }).then(teamCallback)
+      .fail(function(errors) {
+         console.log(errors);
+      });
+    }
   };
 }
 
@@ -218,7 +219,7 @@ function createTrainsCallback(trains) {
       var trainCallback = createTrainCallback();
       restApi.get({
           ref: item,
-          fetch: ['FormattedID', 'Name', 'Children', 'Description', 'Notes'], //fields to fetch
+          //fetch: ['FormattedID', 'Name', 'Children', 'Description', 'Notes'], //fields to fetch
       }).then(trainCallback)
       .fail(function(errors) {
         console.log(errors);
