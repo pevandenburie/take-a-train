@@ -115,37 +115,37 @@ var searchTeam = function(teamName, cb) {
     var teamNameList = [];
 
     // In case the team name is "Roland Garros", search for "ih_roland_garros*"
-    teamNameFormatted = teamName.toLowerCase().replace(' ', '_');
+    teamNameFormatted = teamName.toLowerCase().replace(/ /g, '_');
     teamNameList.push( origin_path + 'ih_'+teamNameFormatted+'*;format=csv' );
 
     // In case the team name is "Roland Garros" or "PC_Mac", search for "ih_rolandgarros*" or "ih_pcmac*"
-    teamNameFormatted = teamName.toLowerCase().replace(' ', '');
+    teamNameFormatted = teamName.toLowerCase().replace(/ /g, '');
     teamNameFormatted = teamNameFormatted.replace('_', '');
     teamNameList.push( origin_path + 'ih_'+teamNameFormatted+'*;format=csv' );
 
     // Try with "phoenix_" instead of "ih_"
-    teamNameFormatted = teamName.toLowerCase().replace(' ', '_');
+    teamNameFormatted = teamName.toLowerCase().replace(/ /g, '_');
     teamNameList.push( origin_path + 'phoenix_'+teamNameFormatted+'*;format=csv' );
 
     // Try with "vgw_" instead of "ih_"
-    teamNameFormatted = teamName.toLowerCase().replace(' ', '_');
+    teamNameFormatted = teamName.toLowerCase().replace(/ /g, '_');
     teamNameList.push( origin_path + 'vgw_'+teamNameFormatted+'*;format=csv' );
 
     // Try with "teamName_scrum"
-    teamNameFormatted = teamName.toLowerCase().replace(' ', '_');
+    teamNameFormatted = teamName.toLowerCase().replace(/ /g, '_');
     teamNameList.push( origin_path +teamNameFormatted+'_scrum;format=csv' );
 
     // In case the team name is "Golden Gate", search for "goldengate_spvtg"
-    teamNameFormatted = teamName.toLowerCase().replace(' ', '');
+    teamNameFormatted = teamName.toLowerCase().replace(/ /g, '');
     teamNameList.push( origin_path +teamNameFormatted+'_spvtg;format=csv' );
 
     // Try with "ve_*teamname_dev*" instead of "ih_"
-    teamNameFormatted = teamName.toLowerCase().replace(' ', '_');
+    teamNameFormatted = teamName.toLowerCase().replace(/ /g, '_');
     teamNameList.push( origin_path + 've_*'+teamNameFormatted+'_dev*;format=csv' );
 
 
     // Try with "scrum-teamname*" instead of "ih_"
-    teamNameFormatted = teamName.toLowerCase().replace(' ', '_');
+    teamNameFormatted = teamName.toLowerCase().replace(/ /g, '_');
     teamNameList.push( origin_path + 'scrum-'+teamNameFormatted+'*;format=csv' );
 
 
@@ -162,15 +162,15 @@ var searchTeam = function(teamName, cb) {
       // (search for '_' returns results for both '-' and '_')
 
       // In case the team name is "Madras Cafe", search for "madras_cafe*"
-      teamNameFormatted = teamName.toLowerCase().replace(' ', '_');
+      teamNameFormatted = teamName.toLowerCase().replace(/ /g, '_');
       teamNameList.push( origin_path +teamNameFormatted+'*;format=csv' );
 
       // In case the team name is "Indian Runner", search for "*indianrunner*"
       // This should return the last unfound teams
-      teamNameFormatted = teamName.toLowerCase().replace(' ', '');
+      teamNameFormatted = teamName.toLowerCase().replace(/ /g, '');
       teamNameList.push( origin_path + '*' +teamNameFormatted+'*;format=csv' );
     }
-    
+
     searchTeamRecursive(teamNameList, cb);
 }
 

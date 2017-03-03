@@ -139,7 +139,7 @@ function createTeamMailerCallback(team) {
   }
 }
 
-function createTeamCallback(train) {
+function createTeamsCallback(train) {
   return function(result) {
 
     // Process the list of teams
@@ -199,7 +199,7 @@ function createTrainCallback() {
       });
 
       // Get list of teams
-      var teamCallback = createTeamCallback(train);
+      var teamCallback = createTeamsCallback(train);
       restApi.get({
         ref: result.Object.Children,
       }).then(teamCallback)

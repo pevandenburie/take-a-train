@@ -56,6 +56,7 @@ var teams = [
   "Atlantis",
   "Turbo",
   "Le Chaudron",
+  "MOR - supporting Purple",  // ih_mor_scrum_team (NOK)
 ];
 
 teams.forEach( function(teamName) {
