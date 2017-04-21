@@ -1,6 +1,7 @@
 var Backbone = require('backbone');
 var Teams = require('../models/team').Teams;
 var mailer = require('../public/javascripts/mailer.js');
+var logger = require('log4js').getLogger();
 
 var Train = Backbone.Model.extend({
   defaults: {
@@ -103,10 +104,11 @@ function getUsernameFromEmail(email) {
 
 function createTeamMembersCallback(team) {
   return function(result) {
+    logger.info('action="TeamCallback", payloadFormat="json"'+', payload="'+JSON.stringify(result.Object)+'"');
 
     // Display each team member
     result.Object.Results.forEach(function(item) {
-      console.log(item.DisplayName + ' (' + item.EmailAddress + ')' + (item.Disabled?' DISABLED':''));
+      logger.debug(item.DisplayName + ' (' + item.EmailAddress + ')' + (item.Disabled?' DISABLED':''));
 
       if (!item.Disabled) {
         // Append the user to the list
@@ -124,27 +126,18 @@ function createTeamMembersCallback(team) {
 
 function createTeamMailerCallback(team) {
   return function(response) {
-    function print_result(result) {
-      if (Array.isArray(result)) {
-        result.forEach( function(row) {
-          console.log(row);
-        });
-      }
-      else {
-        console.log(result);
-      }
-    }
-    print_result(response);
+    logger.debug(JSON.stringify(response));
     team.set('mailers', response);
   }
 }
 
 function createTeamsCallback(train) {
   return function(result) {
+    logger.info('action="TeamsCallback", payloadFormat="json"'+', payload="'+JSON.stringify(result.Object)+'"');
 
     // Process the list of teams
     result.Object.Results.forEach(function(item) {
-      console.log(item.Name + ' (' + item._ref + ')');
+      logger.debug(item.Name + ' (' + item._ref + ')');
 
       // Append the team to the list
       var team = new Team({ Name: item.Name });
@@ -160,7 +153,7 @@ function createTeamsCallback(train) {
         ref: item.TeamMembers,
       }).then(teamMembersCallback)
       .fail(function(errors) {
-         console.log(errors);
+         logger.error(errors);
       });
 
     });
@@ -169,12 +162,14 @@ function createTeamsCallback(train) {
 
 function createTrainCallback() {
   return function(result) {
-    console.log('-----Train--------');
-    console.log(result.Object.Name + ' (' + result.Object._ref + ') ' + (result.Object.State==='Open'?'':result.Object.State));
-    console.log('Description: ' + result.Object.Description);
-    console.log('Notes: ' + result.Object.Notes);
-    //console.log(result.Object.Name + ' (' + JSON.stringify(result.Object) + ')');
-    console.log('------------------');
+    logger.info('action="TrainCallback", payloadFormat="json"'+', payload="'+JSON.stringify(result.Object)+'"');
+
+    logger.debug('-----Train--------');
+    logger.debug(result.Object.Name + ' (' + result.Object._ref + ') ' + (result.Object.State==='Open'?'':result.Object.State));
+    logger.debug('Description: ' + result.Object.Description);
+    logger.debug('Notes: ' + result.Object.Notes);
+    //logger.debug(result.Object.Name + ' (' + JSON.stringify(result.Object) + ')');
+    logger.debug('------------------');
 
     if (result.Object.State==='Open') {
       // Append the train to the list
@@ -187,14 +182,7 @@ function createTrainCallback() {
 
       // Get mailer addresses for the train
       mailer.searchTrain(result.Object.Name, function(response) {
-
-        // function print_result(result) {
-        //   result.forEach( function(row) {
-        //     console.log(row);
-        //   });
-        // }
-        // print_result(response);
-
+        logger.debug(JSON.stringify(response));
         train.set('mailers', response);
       });
 
@@ -204,7 +192,7 @@ function createTrainCallback() {
         ref: result.Object.Children,
       }).then(teamCallback)
       .fail(function(errors) {
-         console.log(errors);
+         logger.error(errors);
       });
     }
   };
@@ -213,6 +201,8 @@ function createTrainCallback() {
 
 function createTrainsCallback(trains) {
   return function(result) {
+    logger.info('action="TrainsCallback", payloadFormat="json"'+', payload="'+JSON.stringify(result.Object)+'"');
+
     // Process the list of trains
     result.Object.Results.forEach(function(item) {
 
@@ -222,7 +212,7 @@ function createTrainsCallback(trains) {
           //fetch: ['FormattedID', 'Name', 'Children', 'Description', 'Notes'], //fields to fetch
       }).then(trainCallback)
       .fail(function(errors) {
-        console.log(errors);
+        logger.error(errors);
       });
 
     });
@@ -236,7 +226,7 @@ restApi.get({
   ref: '/project/29404291867/Children',  // Infinite Home Feature Teams Children
 }).then(trainsCallback)
 .fail(function(errors) {
-   console.log(errors);
+   logger.error(errors);
 });
 
 
