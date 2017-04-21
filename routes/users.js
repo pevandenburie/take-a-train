@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var logger = require('log4js').getLogger();
 
 var searchUser = require('../models/train').searchUser;
 var searchTeam = require('../models/train').searchTeam;
@@ -11,6 +12,7 @@ router.post('/search', function(req, res, next) {
     "href": "/"
   };
   var userObj = req.body;
+  logger.info('action="search '+userObj.name+'"');
   var founds = searchUser(userObj.name);
 
   /*console.log("Users founds " + founds.length);

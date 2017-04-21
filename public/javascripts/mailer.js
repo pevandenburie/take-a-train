@@ -1,5 +1,5 @@
-
 var http = require('https');
+var logger = require('log4js').getLogger();
 
 // The HTTP request we want is https://ews-aln-core.cisco.com/itsm/mailer/rest/search/*ih_navy*;format=csv
 var origin_path = "/itsm/mailer/rest/search/";
@@ -47,8 +47,9 @@ function createMailerCb(cb) {
     });
 
     response.on('end', function() {
-      //console.log(str);
       var result_array = processCSV(str);
+      logger.info('payloadFormat="csv"'+', payload="'+str+'"');
+      //logger.info('payloadFormat="json"'+', payload="'+JSON.stringify(result_array)+'"');
       cb(result_array);
     });
   };
@@ -62,11 +63,11 @@ var searchTrain = function(trainName, cb) {
   // In case the train name is "Orange Train", convert to "orange"
   trainName = trainName.toLowerCase().split(' ')[0];
   options.path = origin_path + 'ih_'+trainName+'*;format=csv';
-  console.log("option.path: "+options.path);
+  logger.info('action="mailer search train '+trainName+'"' + ', options_path="'+options.path+'"');
 
   http.request(options, mailer_cb)
     .on('error', function(error) {
-      //console.log('Error: ' + error.message);
+      logger.error(error.message);
       cb(error.message);
     })
     .end();
@@ -87,6 +88,8 @@ function createMailerCbRecursive(teamNameList, cb) {
       if ((result_array.length === 0) && (teamNameList.length > 0)) {
           searchTeamRecursive(teamNameList, cb);
       } else {
+        logger.info('payloadFormat="csv"'+', payload="'+JSON.stringify(str)+'"');
+        //logger.info('payloadFormat="json"'+', payload="'+JSON.stringify(result_array)+'"');
         cb(result_array);
       }
     });
@@ -98,11 +101,11 @@ function searchTeamRecursive(teamNameList, cb) {
   var mailer_cb = createMailerCbRecursive(teamNameList, cb);
 
   options.path = teamNameList.shift();
-  console.log("option.path: "+options.path);
+  logger.info('action="mailer search team"' + ', options_path="'+options.path+'"');
 
   http.request(options, mailer_cb)
     .on('error', function(error) {
-      //console.log('Error: ' + error.message);
+      logger.error(error.message);
       cb(error.message);
     })
     .end();

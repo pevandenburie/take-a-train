@@ -1,11 +1,13 @@
 var express = require('express');
 var router = express.Router();
-
+var logger = require('log4js').getLogger();
 
 var trains = require('../models/train').trains;
 
 
 router.get('/:name', function(req, res) {
+
+  logger.info('action="get train '+req.params.name+'"');
 
   var train = trains.findWhere({ Name: req.params.name });
 
@@ -34,6 +36,7 @@ router.get('/:name', function(req, res) {
 
 // Get Train selection page
 router.get('/', function(req, res, next) {
+  logger.info('action="get trains"');
   res.render('trains',
     { title: 'Take A Train !',
       trains: trains.toJSON() //Object.keys(trains)
