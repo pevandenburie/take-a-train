@@ -14,5 +14,5 @@ block content
   nav
     ul(class="nav nav-pills")
       each t in trains
-        li(class="my-nav-btn")
-          a(href="/trains/#{t.Name}") #{t.Name}
+        li(class="my-nav-btn my-nav-btn-trains")
+          a(href="/trains/#{t.Name}", style="background-image:linear-gradient(#eeeeee, #{t.color} 80%, #{t.color})") #{t.Name}
