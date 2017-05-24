@@ -39,7 +39,7 @@ router.get('/', function(req, res, next) {
   logger.info('action="get trains"');
   res.render('trains',
     { title: 'Take A Train !',
-      trains: trains.toJSON() //Object.keys(trains)
+      trains: trains.toJSON()
     });
 });
 

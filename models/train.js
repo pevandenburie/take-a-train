@@ -20,10 +20,6 @@ var Trains = Backbone.Collection.extend({
   model: Train,
 });
 
-// exports.Train = Train;
-// exports.Trains = Trains;
-
-
 
 var Team = require('../models/team').Team;
 var Teams = require('../models/team').Teams;
@@ -50,6 +46,7 @@ var restApi = rally({
 
 // global list of trains
 var trains = new Trains();
+trains.comparator = 'Name';
 
 var searchUser = function(lookingForUser) {
   var founds = [];
